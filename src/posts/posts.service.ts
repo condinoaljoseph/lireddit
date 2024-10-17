@@ -1,26 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Post } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
+  private readonly posts: Post[] = []
+
   create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+    this.posts.push({
+      id: this.posts.length + 1,
+      post: createPostDto.post
+    });
   }
 
   findAll() {
-    return `This action returns all posts`;
+    return this.posts;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} post`;
+    return this.posts.find(post => post.id === id);
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+    const postIndex = this.posts.findIndex(post => post.id === id);
+    if (postIndex !== -1) {
+      this.posts[postIndex] = { ...this.posts[postIndex], post: updatePostDto.post }
+    }
   }
 
   remove(id: number) {
-    return `This action removes a #${id} post`;
+    const postIndex = this.posts.findIndex(post => post.id === id);
+    if (postIndex !== -1) {
+      this.posts.splice(postIndex, 1);
+    }
   }
 }

@@ -1,1 +1,4 @@
-export class Post {}
+export class Post {
+    id: number;
+    post: string;
+}
